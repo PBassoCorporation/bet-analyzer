@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Analyzer Bet</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
 
 <h1>⚽ Analyzer Bet - Over 2.5</h1>
@@ -20,10 +22,19 @@
 
   <button onclick="calcular()">Analisar</button>
 
+  <button onclick="limparCampos()" style="background: #ef4444; margin-top:10px;">
+    Limpar
+  </button>
+
   <div id="resultado"></div>
 
 </div>
 
+<h2>📊 Histórico</h2>
+<div id="historico"></div>
+
+<!-- 👇 IMPORTANTE: script SEMPRE no final -->
 <script src="script.js"></script>
+
 </body>
 </html>

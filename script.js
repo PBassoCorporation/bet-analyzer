@@ -1,38 +1,3 @@
-function fatorial(n) {
-  if (n === 0) return 1;
-  return n * fatorial(n - 1);
-}
-
-function poisson(k, lambda) {
-  return (Math.pow(lambda, k) * Math.exp(-lambda)) / fatorial(k);
-}
-
-function salvarHistorico(prob, ev, sinal) {
-
-  let historico = JSON.parse(localStorage.getItem("historico")) || [];
-
-  historico.push({
-    data: new Date().toLocaleString(),
-    prob: prob,
-    ev: ev,
-    sinal: sinal
-  });
-
-  localStorage.setItem("historico", JSON.stringify(historico));
-}
-
-function mostrarHistorico() {
-  let historico = JSON.parse(localStorage.getItem("historico")) || [];
-
-  let html = "";
-
-  historico.slice(-5).reverse().forEach(item => {
-    html += `<p>${item.data} | ${(item.prob*100).toFixed(0)}% | ${item.sinal}</p>`;
-  });
-
-  document.getElementById("historico").innerHTML = html;
-}
-
 function calcular() {
 
   let atkHome = parseFloat(document.getElementById("atkHome").value);
@@ -41,38 +6,36 @@ function calcular() {
   let defHome = parseFloat(document.getElementById("defHome").value);
   let odd = parseFloat(document.getElementById("odd").value);
 
-  let lambdaHome = (atkHome + defAway) / 2;
-  let lambdaAway = (atkAway + defHome) / 2;
+  let xG = (atkHome + defAway + atkAway + defHome) / 2;
 
-  let probOver = 0;
+  let prob;
 
-  for (let i = 0; i <= 7; i++) {
-    for (let j = 0; j <= 7; j++) {
+  if (xG > 3) prob = 0.70;
+  else if (xG > 2.5) prob = 0.60;
+  else prob = 0.45;
 
-      let probCasa = poisson(i, lambdaHome);
-      let probFora = poisson(j, lambdaAway);
-
-      if ((i + j) >= 3) {
-        probOver += probCasa * probFora;
-      }
-    }
-  }
-
-  let ev = (probOver * odd) - 1;
+  let ev = (prob * odd) - 1;
 
   let sinal;
 
-  if (ev > 0.10) sinal = "🔥 ENTRAR FORTE";
-  else if (ev > 0) sinal = "⚠️ ENTRAR LEVE";
+  if (ev > 0.10) sinal = "✅ ENTRAR";
+  else if (ev > 0) sinal = "⚠️ RISCO";
   else sinal = "❌ NÃO ENTRAR";
 
   document.getElementById("resultado").innerHTML =
-    `Prob Over 2.5: ${(probOver*100).toFixed(1)}%<br>
+    `xG: ${xG.toFixed(2)}<br>
+     Probabilidade: ${(prob*100).toFixed(0)}%<br>
      EV: ${ev.toFixed(2)}<br>
      <strong>${sinal}</strong>`;
-
-  salvarHistorico(probOver, ev, sinal);
-  mostrarHistorico();
 }
+function limparCampos() {
 
-mostrarHistorico();
+  document.getElementById("atkHome").value = "";
+  document.getElementById("defAway").value = "";
+  document.getElementById("atkAway").value = "";
+  document.getElementById("defHome").value = "";
+  document.getElementById("odd").value = "";
+
+  document.getElementById("resultado").innerHTML = "";
+
+}
