@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Analyzer Bet</title>
+  <title>Analyzer Bet Pro</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
@@ -10,7 +10,7 @@
 
 <body>
 
-<h1>⚽ Analyzer Bet - Over 2.5</h1>
+<h1>⚽ Analyzer Bet Pro</h1>
 
 <div class="container">
 
@@ -20,10 +20,20 @@
   <input type="number" id="defHome" placeholder="Defesa Casa">
   <input type="number" id="odd" placeholder="Odd Over 2.5">
 
+  <select id="resultadoAposta">
+    <option value="">Resultado da aposta</option>
+    <option value="win">✅ Green</option>
+    <option value="loss">❌ Red</option>
+  </select>
+
   <button onclick="calcular()">Analisar</button>
 
-  <button onclick="limparCampos()" style="background: #ef4444; margin-top:10px;">
+  <button onclick="limparCampos()" class="btn-limpar">
     Limpar
+  </button>
+
+  <button onclick="limparHistorico()" class="btn-historico">
+    Limpar Histórico
   </button>
 
   <div id="resultado"></div>
@@ -33,7 +43,9 @@
 <h2>📊 Histórico</h2>
 <div id="historico"></div>
 
-<!-- 👇 IMPORTANTE: script SEMPRE no final -->
+<h2>💰 Dashboard</h2>
+<div id="dashboard"></div>
+
 <script src="script.js"></script>
 
 </body>

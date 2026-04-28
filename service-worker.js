@@ -1,4 +1,4 @@
-const CACHE_NAME = "bet-app-v2";
+const CACHE_NAME = "bet-app-v3";
 
 self.addEventListener("install", event => {
   self.skipWaiting();

@@ -13,12 +13,12 @@ h1 {
   background: #1e293b;
   padding: 20px;
   margin: 20px auto;
-  width: 300px;
+  width: 320px;
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-input {
+input, select {
   display: block;
   margin: 10px auto;
   padding: 12px;
@@ -36,9 +36,22 @@ button {
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-limpar {
+  background: #ef4444;
+}
+
+.btn-historico {
+  background: #f59e0b;
 }
 
 #resultado {
   margin-top: 20px;
   font-size: 18px;
+}
+
+#historico, #dashboard {
+  margin-top: 15px;
 }
