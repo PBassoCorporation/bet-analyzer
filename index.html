@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Analyzer Bet</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<h1>⚽ Analyzer Bet - Over 2.5</h1>
+
+<div class="container">
+
+  <input type="number" id="atkHome" placeholder="Ataque Casa">
+  <input type="number" id="defAway" placeholder="Defesa Visitante">
+  <input type="number" id="atkAway" placeholder="Ataque Visitante">
+  <input type="number" id="defHome" placeholder="Defesa Casa">
+  <input type="number" id="odd" placeholder="Odd Over 2.5">
+
+  <button onclick="calcular()">Analisar</button>
+
+  <div id="resultado"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
