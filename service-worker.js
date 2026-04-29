@@ -1,6 +1,17 @@
-const CACHE_NAME = "bet-app-v3";
+const CACHE_NAME = "bet-app-v4";
+
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/style.css",
+  "/script.js",
+  "/manifest.json"
+];
 
 self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
   self.skipWaiting();
 });
 
@@ -9,9 +20,7 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+          if (key !== CACHE_NAME) return caches.delete(key);
         })
       );
     })
@@ -20,5 +29,9 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
 });

@@ -7,7 +7,7 @@ function poisson(k, lambda) {
   return (Math.pow(lambda, k) * Math.exp(-lambda)) / fatorial(k);
 }
 
-function salvarHistorico(prob, ev, sinal) {
+function salvarHistorico(partida, prob, ev, sinal) {
 
   let resultadoAposta = document.getElementById("resultadoAposta").value;
 
@@ -15,6 +15,7 @@ function salvarHistorico(prob, ev, sinal) {
 
   historico.push({
     data: new Date().toLocaleString(),
+    partida: partida,
     prob: prob,
     ev: ev,
     sinal: sinal,
@@ -30,7 +31,10 @@ function mostrarHistorico() {
   let html = "";
 
   historico.slice(-10).reverse().forEach(item => {
-    html += `<p>${item.data} | ${(item.prob*100).toFixed(0)}% | ${item.sinal} | ${item.resultado || "-"}</p>`;
+    html += `<p>
+      <strong>${item.partida}</strong><br>
+      ${item.data} | ${(item.prob*100).toFixed(0)}% | ${item.sinal} | ${item.resultado || "-"}
+    </p>`;
   });
 
   document.getElementById("historico").innerHTML = html;
@@ -62,6 +66,7 @@ function atualizarDashboard() {
 
 function limparCampos() {
 
+  document.getElementById("partida").value = "";
   document.getElementById("atkHome").value = "";
   document.getElementById("defAway").value = "";
   document.getElementById("atkAway").value = "";
@@ -80,13 +85,14 @@ function limparHistorico() {
 
 function calcular() {
 
+  let partida = document.getElementById("partida").value;
   let atkHome = parseFloat(document.getElementById("atkHome").value);
   let defAway = parseFloat(document.getElementById("defAway").value);
   let atkAway = parseFloat(document.getElementById("atkAway").value);
   let defHome = parseFloat(document.getElementById("defHome").value);
   let odd = parseFloat(document.getElementById("odd").value);
 
-  if (isNaN(atkHome) || isNaN(defAway) || isNaN(atkAway) || isNaN(defHome) || isNaN(odd)) {
+  if (!partida || isNaN(atkHome) || isNaN(defAway) || isNaN(atkAway) || isNaN(defHome) || isNaN(odd)) {
     alert("Preencha todos os campos!");
     return;
   }
@@ -121,7 +127,7 @@ function calcular() {
      EV: ${ev.toFixed(2)}<br>
      <strong>${sinal}</strong>`;
 
-  salvarHistorico(probOver, ev, sinal);
+  salvarHistorico(partida, probOver, ev, sinal);
   mostrarHistorico();
   atualizarDashboard();
 }
@@ -130,3 +136,10 @@ window.onload = function() {
   mostrarHistorico();
   atualizarDashboard();
 };
+
+// SERVICE WORKER (offline)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("service-worker.js");
+  });
+}
