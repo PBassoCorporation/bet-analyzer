@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Analyzer Bet Pro</title>
-
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -16,37 +14,33 @@
 
   <input type="text" id="partida" placeholder="Ex: Flamengo x Palmeiras">
 
+  <!-- 🔥 OVER 2.5 -->
+  <h3>⚽ Over 2.5</h3>
   <input type="number" id="atkHome" placeholder="Ataque Casa">
   <input type="number" id="defAway" placeholder="Defesa Visitante">
   <input type="number" id="atkAway" placeholder="Ataque Visitante">
   <input type="number" id="defHome" placeholder="Defesa Casa">
-  <input type="number" id="odd" placeholder="Odd Over 2.5">
+  <input type="number" id="oddOver" placeholder="Odd Over 2.5">
+  <button onclick="calcularOver()">Analisar Over</button>
+  <div id="resultadoOver"></div>
 
-  <select id="resultadoAposta">
-    <option value="">Resultado da aposta</option>
-    <option value="win">✅ Green</option>
-    <option value="loss">❌ Red</option>
-  </select>
+  <!-- 🤝 BTTS -->
+  <h3>🤝 Ambas Marcam</h3>
+  <input type="number" id="bttsHome" placeholder="% jogos marcando casa (ex: 0.8)">
+  <input type="number" id="bttsAway" placeholder="% jogos marcando visitante">
+  <input type="number" id="oddBtts" placeholder="Odd BTTS">
+  <button onclick="calcularBTTS()">Analisar BTTS</button>
+  <div id="resultadoBTTS"></div>
 
-  <button onclick="calcular()">Analisar</button>
-
-  <button onclick="limparCampos()" class="btn-limpar">
-    Limpar
-  </button>
-
-  <button onclick="limparHistorico()" class="btn-historico">
-    Limpar Histórico
-  </button>
-
-  <div id="resultado"></div>
+  <!-- 🚩 ESCANTEIOS -->
+  <h3>🚩 Escanteios Over 9.5</h3>
+  <input type="number" id="cornersHome" placeholder="Média escanteios casa">
+  <input type="number" id="cornersAway" placeholder="Média escanteios visitante">
+  <input type="number" id="oddCorners" placeholder="Odd escanteios">
+  <button onclick="calcularCorners()">Analisar Escanteios</button>
+  <div id="resultadoCorners"></div>
 
 </div>
-
-<h2>📊 Histórico</h2>
-<div id="historico"></div>
-
-<h2>💰 Dashboard</h2>
-<div id="dashboard"></div>
 
 <script src="script.js"></script>
 

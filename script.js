@@ -1,3 +1,4 @@
+// 🔥 POISSON (OVER)
 function fatorial(n) {
   if (n === 0) return 1;
   return n * fatorial(n - 1);
@@ -7,139 +8,78 @@ function poisson(k, lambda) {
   return (Math.pow(lambda, k) * Math.exp(-lambda)) / fatorial(k);
 }
 
-function salvarHistorico(partida, prob, ev, sinal) {
+// =========================
+// ⚽ OVER 2.5
+// =========================
+function calcularOver() {
 
-  let resultadoAposta = document.getElementById("resultadoAposta").value;
-
-  let historico = JSON.parse(localStorage.getItem("historico")) || [];
-
-  historico.push({
-    data: new Date().toLocaleString(),
-    partida: partida,
-    prob: prob,
-    ev: ev,
-    sinal: sinal,
-    resultado: resultadoAposta
-  });
-
-  localStorage.setItem("historico", JSON.stringify(historico));
-}
-
-function mostrarHistorico() {
-  let historico = JSON.parse(localStorage.getItem("historico")) || [];
-
-  let html = "";
-
-  historico.slice(-10).reverse().forEach(item => {
-    html += `<p>
-      <strong>${item.partida}</strong><br>
-      ${item.data} | ${(item.prob*100).toFixed(0)}% | ${item.sinal} | ${item.resultado || "-"}
-    </p>`;
-  });
-
-  document.getElementById("historico").innerHTML = html;
-}
-
-function atualizarDashboard() {
-
-  let historico = JSON.parse(localStorage.getItem("historico")) || [];
-
-  let banca = 0;
-  let wins = 0;
-  let losses = 0;
-
-  historico.forEach(item => {
-    if (item.resultado === "win") {
-      banca += 1;
-      wins++;
-    } else if (item.resultado === "loss") {
-      banca -= 1;
-      losses++;
-    }
-  });
-
-  document.getElementById("dashboard").innerHTML =
-    `Lucro: ${banca} unidades<br>
-     Greens: ${wins}<br>
-     Reds: ${losses}`;
-}
-
-function limparCampos() {
-
-  document.getElementById("partida").value = "";
-  document.getElementById("atkHome").value = "";
-  document.getElementById("defAway").value = "";
-  document.getElementById("atkAway").value = "";
-  document.getElementById("defHome").value = "";
-  document.getElementById("odd").value = "";
-  document.getElementById("resultadoAposta").value = "";
-
-  document.getElementById("resultado").innerHTML = "";
-}
-
-function limparHistorico() {
-  localStorage.removeItem("historico");
-  mostrarHistorico();
-  atualizarDashboard();
-}
-
-function calcular() {
-
-  let partida = document.getElementById("partida").value;
   let atkHome = parseFloat(document.getElementById("atkHome").value);
   let defAway = parseFloat(document.getElementById("defAway").value);
   let atkAway = parseFloat(document.getElementById("atkAway").value);
   let defHome = parseFloat(document.getElementById("defHome").value);
-  let odd = parseFloat(document.getElementById("odd").value);
-
-  if (!partida || isNaN(atkHome) || isNaN(defAway) || isNaN(atkAway) || isNaN(defHome) || isNaN(odd)) {
-    alert("Preencha todos os campos!");
-    return;
-  }
+  let odd = parseFloat(document.getElementById("oddOver").value);
 
   let lambdaHome = (atkHome + defAway) / 2;
   let lambdaAway = (atkAway + defHome) / 2;
 
-  let probOver = 0;
+  let prob = 0;
 
   for (let i = 0; i <= 7; i++) {
     for (let j = 0; j <= 7; j++) {
-
-      let probCasa = poisson(i, lambdaHome);
-      let probFora = poisson(j, lambdaAway);
-
       if ((i + j) >= 3) {
-        probOver += probCasa * probFora;
+        prob += poisson(i, lambdaHome) * poisson(j, lambdaAway);
       }
     }
   }
 
-  let ev = (probOver * odd) - 1;
+  let ev = (prob * odd) - 1;
 
-  let sinal;
+  let sinal = ev > 0 ? "✅ ENTRAR" : "❌ NÃO ENTRAR";
 
-  if (ev > 0.10) sinal = "🔥 ENTRAR FORTE";
-  else if (ev > 0) sinal = "⚠️ ENTRAR LEVE";
-  else sinal = "❌ NÃO ENTRAR";
-
-  document.getElementById("resultado").innerHTML =
-    `Prob Over 2.5: ${(probOver*100).toFixed(1)}%<br>
-     EV: ${ev.toFixed(2)}<br>
-     <strong>${sinal}</strong>`;
-
-  salvarHistorico(partida, probOver, ev, sinal);
-  mostrarHistorico();
-  atualizarDashboard();
+  document.getElementById("resultadoOver").innerHTML =
+    `Prob: ${(prob*100).toFixed(1)}% | EV: ${ev.toFixed(2)} | ${sinal}`;
 }
 
-window.onload = function() {
-  mostrarHistorico();
-  atualizarDashboard();
-};
+// =========================
+// 🤝 BTTS
+// =========================
+function calcularBTTS() {
 
-// SERVICE WORKER (offline)
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function() {
-    navigator.serviceWorker.register("service-worker.js");
-  });
+  let home = parseFloat(document.getElementById("bttsHome").value);
+  let away = parseFloat(document.getElementById("bttsAway").value);
+  let odd = parseFloat(document.getElementById("oddBtts").value);
+
+  let prob = home * away;
+
+  let ev = (prob * odd) - 1;
+
+  let sinal = ev > 0 ? "✅ ENTRAR" : "❌ NÃO ENTRAR";
+
+  document.getElementById("resultadoBTTS").innerHTML =
+    `Prob: ${(prob*100).toFixed(1)}% | EV: ${ev.toFixed(2)} | ${sinal}`;
+}
+
+// =========================
+// 🚩 ESCANTEIOS
+// =========================
+function calcularCorners() {
+
+  let home = parseFloat(document.getElementById("cornersHome").value);
+  let away = parseFloat(document.getElementById("cornersAway").value);
+  let odd = parseFloat(document.getElementById("oddCorners").value);
+
+  let mediaTotal = home + away;
+
+  let prob;
+
+  if (mediaTotal > 11) prob = 0.70;
+  else if (mediaTotal > 10) prob = 0.60;
+  else prob = 0.45;
+
+  let ev = (prob * odd) - 1;
+
+  let sinal = ev > 0 ? "✅ ENTRAR" : "❌ NÃO ENTRAR";
+
+  document.getElementById("resultadoCorners").innerHTML =
+    `Média: ${mediaTotal} | EV: ${ev.toFixed(2)} | ${sinal}`;
 }
